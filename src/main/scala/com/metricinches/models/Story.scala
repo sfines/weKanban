@@ -12,6 +12,10 @@ import org.squeryl.annotations._
  * To change this template use File | Settings | File Templates.
  */
 class Story(val number: String, val title: String, val phase: String){
+
+ private def phaseLimits = Map( "ready" -> Some(3), "dev" -> Some(2), "test" -> Some(2), "deploy" -> None)
+
+
   private[this] def validate = {
     if( number.isEmpty || title.isEmpty){
       throw new ValidationException("Both number and title are required.")
@@ -38,6 +42,10 @@ class Story(val number: String, val title: String, val phase: String){
 object Story{
   def apply(number:String, title: String) =
     new Story(number, title, "ready")
+
+  def findAllByPhase(phase:String) = tx {
+    from(stories)(s => where(s.phase === phase) select(s)) map(s=> s)
+  }
 }
 
 class ValidationException( message: String) extends RuntimeException(message)
