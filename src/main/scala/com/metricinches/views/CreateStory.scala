@@ -13,6 +13,11 @@ object CreateStory {
         <fieldset>
           <legend>Create a new Story</legend>
           <div class="section">
+            <label for="storyNumber">Story Number <span class="subtle">(uniquely identifies the story</span></label>
+            <input type="text" name="storyNumber" size="10" maxLength="10" minlength="3" id="storyNumber"></input>
+          </div>
+
+          <div class="section">
             <label for="title">Title <span class="subtle">(describe the story)</span></label>
             <textarea rows="5" cols="30" name="title" id="title"></textarea>
           </div>
