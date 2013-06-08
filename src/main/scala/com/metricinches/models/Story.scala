@@ -15,6 +15,12 @@ class Story(val number: String, val title: String, val phase: String){
 
  private def phaseLimits = Map( "ready" -> Some(3), "dev" -> Some(2), "test" -> Some(2), "deploy" -> None)
 
+  private[this] def validateLimit( phase: String) = {
+    val currentSize:Long = from(stories)(s => where( s.phase === phase) compute(count))
+    if( currentSize == phaseLimits(phase).getOrElse(-1)){
+      throw new ValidationException("You cannot exceed the limit set for the phase")
+    }
+  }
 
   private[this] def validate = {
     if( number.isEmpty || title.isEmpty){
