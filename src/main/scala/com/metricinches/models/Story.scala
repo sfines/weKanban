@@ -43,6 +43,24 @@ class Story(val number: String, val title: String, val phase: String){
       }
     }
   }
+
+  def moveTo(phase: String): Either[Throwable, String] = {
+    tx{
+      try{
+        validateLimit(phase);
+        update(stories)(s =>
+          where(s.number === this.number)
+          set(s.phase := phase)
+        )
+
+        Right("Card "+this.number+ " was moved to the "+phase+" phase.")
+
+      } catch {
+        case exception:
+           Throwable => exception.printStackTrace ; Left(exception)
+      }
+    }
+  }
 }
 
 object Story{
@@ -52,6 +70,9 @@ object Story{
   def findAllByPhase(phase:String) = tx {
     from(stories)(s => where(s.phase === phase) select(s)) map(s=> s)
   }
+
+  def findByNumber(number: String) =
+    tx { stories.where( s => s.number === number).single }
 }
 
 class ValidationException( message: String) extends RuntimeException(message)

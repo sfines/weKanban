@@ -34,12 +34,7 @@ object KanbanBoard {
         <h3 class="message" title="Stories ready for deployment">Deploy</h3>
         {stories("deploy")}
       </div>
-      <script type="text/javascript" src="/js/jquery-1.4.2.js" />
-      <script type="text/javascript" src="/js/jquery.ui.core.js" />
-      <script type="text/javascript" src="/js/jquery.ui.widget.js" />
-      <script type="text/javascript" src="/js/jquery.ui.mouse.js" />
-      <script type="text/javascript" src="/js/jquery.ui.draggable.js" />
-      <script type="text/javascript" src="/js/jquery.ui.droppable.js" />
+
     </body>
   </html>
 
@@ -48,18 +43,26 @@ object KanbanBoard {
     <head>
       <meta charset="UTF-" />
       <title>weKanban: A Simple Kanban Board</title>
-      <link type="text/css" href="/css/main.css" rel="stylesheet" media="screen" />
-      <script type="text/javascript" src="/js/main.js" />
+
+      <script type="text/javascript" src="/js/jquery-1.4.2.js" ></script>
+      <script type="text/javascript" src="/js/jquery.ui.core.js"></script>
+      <script type="text/javascript" src="/js/jquery.ui.widget.js"></script>
+      <script type="text/javascript" src="/js/jquery.ui.mouse.js"></script>
+      <script type="text/javascript" src="/js/jquery.ui.draggable.js"></script>
+      <script type="text/javascript" src="/js/jquery.ui.droppable.js"></script>
+      <script type="text/javascript" src="/js/main.js"></script>
       <script type="text/javascript">
         init();
       </script>
+
+      <link type="text/css" href="/css/main.css" rel="stylesheet" media="screen" />
     </head>
 
 
 
   private def stories(phase:String) =
     for(story <- Story.findAllByPhase(phase)) yield
-      <div id="{story.number}" class="story">
+      <div id={story.number} class="story">
         <fieldset>
           <legend>{story.number}</legend>
           <div class="section">

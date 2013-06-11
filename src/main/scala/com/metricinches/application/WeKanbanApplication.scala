@@ -47,11 +47,22 @@ final class WeKanbanApplication extends StreamStreamServletApplication{
       request match {
         case MethodParts(GET, "card" :: "create" :: Nil ) =>
           Some(OK(ContentType, "text/html") << transitional << CreateStory(param("message")))
-        case MethodParts(POST, "card" :: "save" :: Nil ) =>
-          Some(saveStory)
+        case MethodParts(POST, "card" :: "save" :: Nil ) => Some(saveStory)
         case MethodParts(GET, "kanban" :: "board" :: Nil) =>
           Some(OK(ContentType, "text/html") << transitional << KanbanBoard())
+        case MethodParts(POST, "card" :: "move" :: Nil) => Some(moveCard)
         case _ => None
       }
+  }
+
+  private def moveCard(implicit request:Request[Stream], servletRequest: HttpServletRequest) =
+  {
+    val number = param_!("storyNumber")
+    val phase = param_!("phase")
+    val story = Story.findByNumber(number)
+    story.moveTo(phase) match {
+      case Right(message) => OK(ContentType, "text/html") << transitional << message
+      case Left(error) => OK(ContentType, "text/html") << transitional << error.getMessage
+    }
   }
 }
