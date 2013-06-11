@@ -7,7 +7,7 @@ import request._
 import servlet._
 import HttpServlet._
 import Slinky._
-import com.metricinches.views.{KanbanBoard, CreateStory}
+import com.metricinches.views.html._
 import scalaz.http.response.xhtml._
 import com.metricinches.models.Story
 
@@ -39,17 +39,18 @@ final class WeKanbanApplication extends StreamStreamServletApplication{
     Story(number, title).save match {
       case Right(message) =>
         redirects[ Stream, Stream ]("/card/create", ("message", message))
-      case Left(error) => OK(ContentType, "text/html") << transitional << CreateStory(error.toString)
+      case Left(error) => OK(ContentType, "text/html") << transitional << CreateStory.render(error.toString).body
     }
   }
 
   def handle(implicit request: Request[Stream], servletRequest: HttpServletRequest): Option[Response[Stream]] = {
       request match {
         case MethodParts(GET, "card" :: "create" :: Nil ) =>
-          Some(OK(ContentType, "text/html") << transitional << CreateStory(param("message")))
+          Some(OK(ContentType, "text/html") << transitional << CreateStory.render(param("message")).body)
         case MethodParts(POST, "card" :: "save" :: Nil ) => Some(saveStory)
         case MethodParts(GET, "kanban" :: "board" :: Nil) =>
-          Some(OK(ContentType, "text/html") << transitional << KanbanBoard())
+          Some(OK(ContentType, "text/html") << transitional << kanbanboard.render().body )
+
         case MethodParts(POST, "card" :: "move" :: Nil) => Some(moveCard)
         case _ => None
       }

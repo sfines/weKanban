@@ -8,6 +8,8 @@ scalacOptions ++= Seq("-unchecked", "-deprecation")
 
 seq( webSettings :_*)
 
+seq(Twirl.settings: _*)
+
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "6.0.3"
 
 libraryDependencies += "org.scalaz" %% "scalaz-http" % "6.0.3"
